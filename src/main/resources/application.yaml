@@ -18,3 +18,8 @@ logging:
   level:
     root: info
     org.noix.api.management: debug
+
+app:
+  security:
+    secret:
+    expiration: 604800000 # 7 days
