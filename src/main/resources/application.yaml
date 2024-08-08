@@ -1,0 +1,20 @@
+
+spring:
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+
+  datasource:
+    username: postgres
+    password: postgres
+    url: jdbc:postgresql://localhost:5432/task-manager
+
+
+logging:
+  level:
+    root: info
+    org.noix.api.management: debug
