@@ -9,7 +9,8 @@ import java.util.List;
 public enum Role {
     ADMIN(List.of(Permission.values())),
     USER (List.of(
-            Permission.READ
+            Permission.READ,
+            Permission.AUTHENTICATED
     ));
 
     private final List<Permission> permissions;

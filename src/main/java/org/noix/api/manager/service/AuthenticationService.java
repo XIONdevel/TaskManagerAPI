@@ -1,6 +1,7 @@
 package org.noix.api.manager.service;
 
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.noix.api.manager.dto.request.AuthenticationRequest;
@@ -44,7 +45,7 @@ public class AuthenticationService {
             token = jwtService.createToken(user);
             jwt = token.getJwt();
         }
-        response.addCookie(getCookie(jwt));
+        response.addCookie(createCookie(jwt));
     }
 
     public void register(AuthenticationRequest request, HttpServletResponse response) throws IOException {
@@ -56,10 +57,39 @@ public class AuthenticationService {
 
         Token token = jwtService.createToken(user);
         System.out.println("Token: " + token.getJwt());
-        response.addCookie(getCookie(token.getJwt()));
+        response.addCookie(createCookie(token.getJwt()));
     }
 
-    private Cookie getCookie(String jwt) {
+    //TODO: add permission requirements 'AUTHENTICATED'
+    public void logout(HttpServletRequest request, HttpServletResponse response) {
+        Cookie authCookie = jwtService.extractAuthCookie(request.getCookies());
+        String jwt = authCookie.getValue();
+        tokenService.removeToken(jwt);
+        response.addCookie(createEmptyCookie());
+    }
+
+    //TODO: add permission requirements 'AUTHENTICATED'
+    public void logoutEverywhere(HttpServletRequest request, HttpServletResponse response) {
+        User user = loadUser(request);
+        tokenService.removeAllTokens(user);
+        response.addCookie(createEmptyCookie());
+    }
+
+    // No token validation, use only for AUTHENTICATED endpoints
+    private User loadUser(HttpServletRequest request) {
+        Cookie authCookie = jwtService.extractAuthCookie(request.getCookies());
+        String username = jwtService.extractUsername(authCookie.getValue());
+        return userService.loadUserByUsername(username);
+    }
+
+    private Cookie createEmptyCookie() {
+        Cookie cookie = new Cookie("Authorization", "");
+        cookie.setHttpOnly(true);
+        cookie.setMaxAge(0);
+        return cookie;
+    }
+
+    private Cookie createCookie(String jwt) {
         Cookie cookie = new Cookie("Authorization", jwt);
         cookie.setHttpOnly(true);
         cookie.setMaxAge((int) (expiration / 1000));

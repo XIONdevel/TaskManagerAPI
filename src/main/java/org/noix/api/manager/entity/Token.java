@@ -6,7 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Date;
+import java.util.Date;
+
 
 @Entity
 @Data
@@ -24,4 +25,8 @@ public class Token {
     @Column(unique = true)
     private String jwt;
     private Date expiration;
+
+    public boolean isExpired() {
+        return this.expiration.after(new Date(System.currentTimeMillis()));
+    }
 }

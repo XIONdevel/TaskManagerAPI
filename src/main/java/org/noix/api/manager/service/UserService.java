@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.noix.api.manager.entity.User;
 import org.noix.api.manager.entity.role.Role;
 import org.noix.api.manager.repository.UserRepository;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -33,7 +32,5 @@ public class UserService implements UserDetailsService {
                             .build()
             );
         }
-
-
     }
 }

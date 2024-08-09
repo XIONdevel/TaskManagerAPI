@@ -1,6 +1,7 @@
 package org.noix.api.manager.config;
 
 import lombok.RequiredArgsConstructor;
+import org.noix.api.manager.entity.role.Permission;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -33,7 +34,15 @@ public class SecurityConfig {
                         jwtFilter, UsernamePasswordAuthenticationFilter.class
                 )
                 .authorizeHttpRequests(authorize -> authorize       //TODO: configure matchers
-                        .anyRequest().permitAll()
+                        .requestMatchers(
+                                "/api/authenticate",
+                                "/api/register"
+                        ).permitAll()
+
+                        .requestMatchers(
+                                "/api/logout-here",
+                                "/api/logout-all"
+                        ).hasAuthority(Permission.AUTHENTICATED.name())
                 )
                 .rememberMe(Customizer.withDefaults());
         return http.build();

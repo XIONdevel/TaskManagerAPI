@@ -1,5 +1,6 @@
 package org.noix.api.manager.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.noix.api.manager.dto.request.AuthenticationRequest;
@@ -14,7 +15,7 @@ import java.io.IOException;
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
-public class TempController {
+public class AuthenticationController {
 
     private final AuthenticationService authService;
 
@@ -28,5 +29,14 @@ public class TempController {
         authService.authenticate(request, response);
     }
 
+    @PostMapping("/logout-here")
+    public void logout(HttpServletRequest request, HttpServletResponse response) {
+        authService.logout(request, response);
+    }
+
+    @PostMapping("/logout-all")
+    public void logoutEverywhere(HttpServletRequest request, HttpServletResponse response) {
+        authService.logoutEverywhere(request, response);
+    }
 
 }

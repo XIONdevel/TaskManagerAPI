@@ -6,7 +6,6 @@ import org.noix.api.manager.entity.User;
 import org.noix.api.manager.repository.TokenRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,13 +22,13 @@ public class TokenService {
             return false;
         }
         Token token = optionalToken.get();
-        return token.getUser().equals(user) && token.getExpiration().before(new Date());
+        return token.getUser().equals(user) && !token.isExpired();
     }
 
     public Token getValidToken(User user) {
         List<Token> tokens = tokenRepository.getAllByUser(user);
         for (Token t : tokens) {
-            if (t.getExpiration().before(new Date())) {
+            if (!t.isExpired()) {
                 return t;
             }
         }
@@ -43,5 +42,13 @@ public class TokenService {
                 .expiration(new java.sql.Date(System.currentTimeMillis() + expiration))
                 .build();
         return tokenRepository.save(token);
+    }
+
+    public void removeAllTokens(User user) {
+        tokenRepository.deleteAllByUser(user);
+    }
+
+    public void removeToken(String jwt) {
+        tokenRepository.deleteByJwt(jwt);
     }
 }
