@@ -1,5 +1,7 @@
 package org.noix.api.manager.service;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.noix.api.manager.entity.User;
 import org.noix.api.manager.entity.role.Role;
@@ -13,11 +15,19 @@ import org.springframework.stereotype.Service;
 public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
+    private final JwtService jwtService;
 
     @Override
     public User loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User with username: " + username + " not found"));
+    }
+
+    // No token validation, use only for AUTHENTICATED endpoints
+    public User getUserFromRequest(HttpServletRequest request) {
+        Cookie authCookie = jwtService.extractAuthCookie(request.getCookies());
+        String username = jwtService.extractUsername(authCookie.getValue());
+        return loadUserByUsername(username);
     }
 
     public User createUser(String username, String password) {

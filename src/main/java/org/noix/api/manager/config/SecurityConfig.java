@@ -33,7 +33,7 @@ public class SecurityConfig {
                 .addFilterBefore(
                         jwtFilter, UsernamePasswordAuthenticationFilter.class
                 )
-                .authorizeHttpRequests(authorize -> authorize       //TODO: configure matchers
+                .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(
                                 "/api/authenticate",
                                 "/api/register"
@@ -47,6 +47,4 @@ public class SecurityConfig {
                 .rememberMe(Customizer.withDefaults());
         return http.build();
     }
-
-
 }

@@ -60,7 +60,6 @@ public class AuthenticationService {
         response.addCookie(createCookie(token.getJwt()));
     }
 
-    //TODO: add permission requirements 'AUTHENTICATED'
     public void logout(HttpServletRequest request, HttpServletResponse response) {
         Cookie authCookie = jwtService.extractAuthCookie(request.getCookies());
         String jwt = authCookie.getValue();
@@ -68,19 +67,12 @@ public class AuthenticationService {
         response.addCookie(createEmptyCookie());
     }
 
-    //TODO: add permission requirements 'AUTHENTICATED'
     public void logoutEverywhere(HttpServletRequest request, HttpServletResponse response) {
-        User user = loadUser(request);
+        User user = userService.getUserFromRequest(request);
         tokenService.removeAllTokens(user);
         response.addCookie(createEmptyCookie());
     }
 
-    // No token validation, use only for AUTHENTICATED endpoints
-    private User loadUser(HttpServletRequest request) {
-        Cookie authCookie = jwtService.extractAuthCookie(request.getCookies());
-        String username = jwtService.extractUsername(authCookie.getValue());
-        return userService.loadUserByUsername(username);
-    }
 
     private Cookie createEmptyCookie() {
         Cookie cookie = new Cookie("Authorization", "");
