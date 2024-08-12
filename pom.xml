@@ -11,8 +11,8 @@
     <groupId>org.noix</groupId>
     <artifactId>TaskManagerAPI</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>TaskManagmentAPI</name>
-    <description>TaskManagmentAPI</description>
+    <name>TaskManagementAPI</name>
+    <description>TaskManagementAPI</description>
     <url/>
     <licenses>
         <license/>

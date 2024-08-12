@@ -35,13 +35,14 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(
-                                "/api/authenticate",
-                                "/api/register"
+                                "/api/auth/authenticate",
+                                "/api/auth/register"
                         ).permitAll()
 
                         .requestMatchers(
-                                "/api/logout-here",
-                                "/api/logout-all"
+                                "/api/auth/logout-here",
+                                "/api/auth/logout-all",
+                                "/api/task/**"
                         ).hasAuthority(Permission.AUTHENTICATED.name())
                 )
                 .rememberMe(Customizer.withDefaults());

@@ -15,4 +15,6 @@ public interface BasicTaskRepository extends JpaRepository<BasicTask, Long> {
 
     void deleteAllByOwner(User owner);
 
+    boolean existsByIdAndOwner(Long id, User owner);
+
 }
