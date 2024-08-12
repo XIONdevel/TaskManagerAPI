@@ -1,4 +1,4 @@
-﻿package org.noix.api.manager.service;
+package org.noix.api.manager.service;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;

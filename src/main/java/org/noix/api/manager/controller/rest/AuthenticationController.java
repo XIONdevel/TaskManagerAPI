@@ -1,4 +1,4 @@
-package org.noix.api.manager.controller;
+package org.noix.api.manager.controller.rest;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

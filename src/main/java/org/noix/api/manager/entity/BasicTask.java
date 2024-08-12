@@ -27,7 +27,7 @@ public class BasicTask implements Task, Serializable {
     private String name;
     private String description;
 
-    @Column(name = "owner_id")
+    @JoinColumn(name = "owner_id")
     @ManyToOne(fetch = FetchType.LAZY)
     private User owner;
 

@@ -1,14 +1,12 @@
-﻿package org.noix.api.manager.controller;
+package org.noix.api.manager.controller.rest;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.noix.api.manager.entity.BasicTask;
 import org.noix.api.manager.entity.task.Task;
 import org.noix.api.manager.service.TaskService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.naming.NoPermissionException;
 import java.util.List;
 
 @RestController
