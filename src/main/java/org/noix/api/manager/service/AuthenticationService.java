@@ -49,14 +49,16 @@ public class AuthenticationService {
     }
 
     public void register(AuthenticationRequest request, HttpServletResponse response) throws IOException {
-        User user = userService.createUser(request.getUsername(), passwordEncoder.encode(request.getPassword()));
+        User user = userService.createUser(
+                request.getUsername(),
+                passwordEncoder.encode(request.getPassword())
+        );
         if (user.getUsername() == null) {
             response.sendError(409, "Username is taken");
             return;
         }
 
         Token token = jwtService.createToken(user);
-        System.out.println("Token: " + token.getJwt());
         response.addCookie(createCookie(token.getJwt()));
     }
 
