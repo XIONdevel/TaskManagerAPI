@@ -45,6 +45,7 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/api/auth/logout-here",
                                 "/api/auth/logout-all",
+                                "/api/auth/check",
                                 "/api/task/**"
                         ).hasAuthority(Permission.AUTHENTICATED.name())
                 )

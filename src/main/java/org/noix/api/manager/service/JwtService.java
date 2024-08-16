@@ -1,9 +1,6 @@
 package org.noix.api.manager.service;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwe;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.Cookie;
@@ -85,10 +82,10 @@ public class JwtService {
 
     private Claims extractAllClaims(String jwt) {
         return Jwts.parser()
-                .decryptWith(getSecretKey())
+                .verifyWith(getSecretKey())
                 .build()
                 .parse(jwt)
-                .accept(Jwe.CLAIMS)
+                .accept(Jws.CLAIMS)
                 .getPayload();
     }
 

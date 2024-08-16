@@ -20,13 +20,13 @@ public class Token {
     @Id
     @GeneratedValue
     private Long id;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     private User user;
     @Column(unique = true)
     private String jwt;
     private Date expiration;
 
     public boolean isExpired() {
-        return this.expiration.after(new Date(System.currentTimeMillis()));
+        return this.expiration.before(new Date(System.currentTimeMillis()));
     }
 }

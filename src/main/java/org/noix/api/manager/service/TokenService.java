@@ -28,7 +28,9 @@ public class TokenService {
     public Token getValidToken(User user) {
         List<Token> tokens = tokenRepository.getAllByUser(user);
         for (Token t : tokens) {
-            if (!t.isExpired()) {
+            if (t.isExpired()) {
+                tokenRepository.deleteById(t.getId());
+            } else {
                 return t;
             }
         }

@@ -5,10 +5,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.noix.api.manager.dto.request.AuthenticationRequest;
 import org.noix.api.manager.service.AuthenticationService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 
@@ -39,4 +37,9 @@ public class AuthenticationController {
         authService.logoutEverywhere(request, response);
     }
 
+    //Idk if someone need an explanation... If you can access this endpoint = you authenticated ._.
+    @PostMapping("/check")
+    public ResponseEntity<Void> checkAuthentication() {
+        return ResponseEntity.ok().build();
+    }
 }

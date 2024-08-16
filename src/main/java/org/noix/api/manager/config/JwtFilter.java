@@ -46,7 +46,6 @@ public class JwtFilter extends OncePerRequestFilter {
             }
 
             String username = jwtService.extractUsername(jwt);
-
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 User user = userService.loadUserByUsername(username);
                 if (jwtService.isValid(jwt, user)) {
@@ -66,6 +65,4 @@ public class JwtFilter extends OncePerRequestFilter {
         }
         filterChain.doFilter(request, response);
     }
-
-
 }

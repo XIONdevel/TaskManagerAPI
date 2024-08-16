@@ -24,4 +24,4 @@ app:
     secret: lfQuJL/ZkLwIDR28cNTbrzuWoZVtcW6v+5lAa/5esAFmx3p5M2VkeSsyEwWXXEuBCe9YZsoS/d5zaxsEXI/t4w== # HS512
     expiration: 604800000 # 7 days
   cors:
-    server: http://localhost:3000
+    server: http://localhost:3000 #web server link
