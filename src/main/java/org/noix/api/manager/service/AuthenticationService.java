@@ -1,13 +1,11 @@
 package org.noix.api.manager.service;
 
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.noix.api.manager.dto.request.AuthenticationRequest;
 import org.noix.api.manager.entity.Token;
 import org.noix.api.manager.entity.User;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -24,8 +22,6 @@ public class AuthenticationService {
     private final TokenService tokenService;
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
-    @Value("${app.security.expiration}")
-    private Long expiration;
 
 
     public void authenticate(AuthenticationRequest request, HttpServletResponse response) {
@@ -45,7 +41,7 @@ public class AuthenticationService {
             token = jwtService.createToken(user);
             jwt = token.getJwt();
         }
-        response.addCookie(createCookie(jwt));
+        response.addHeader("Authorization", "Bearer " + jwt);
     }
 
     public void register(AuthenticationRequest request, HttpServletResponse response) throws IOException {
@@ -59,37 +55,20 @@ public class AuthenticationService {
         }
 
         Token token = jwtService.createToken(user);
-        response.addCookie(createCookie(token.getJwt()));
+        response.addHeader("Authorization", "Bearer " + token.getJwt());
     }
 
     public void logout(HttpServletRequest request, HttpServletResponse response) {
-        Cookie authCookie = jwtService.extractAuthCookie(request.getCookies());
-        String jwt = authCookie.getValue();
+        String jwt = request.getHeader("Authorization").substring(7);
         tokenService.removeToken(jwt);
-        response.addCookie(createEmptyCookie());
+        response.addHeader("Authorization", "");
     }
 
     public void logoutEverywhere(HttpServletRequest request, HttpServletResponse response) {
         User user = userService.getUserFromRequest(request);
         tokenService.removeAllTokens(user);
-        response.addCookie(createEmptyCookie());
+        response.addHeader("Authorization", "");
     }
-
-
-    private Cookie createEmptyCookie() {
-        Cookie cookie = new Cookie("Authorization", "");
-        cookie.setHttpOnly(true);
-        cookie.setMaxAge(0);
-        return cookie;
-    }
-
-    private Cookie createCookie(String jwt) {
-        Cookie cookie = new Cookie("Authorization", jwt);
-        cookie.setHttpOnly(true);
-        cookie.setMaxAge((int) (expiration / 1000));
-        return cookie;
-    }
-
 }
 
 

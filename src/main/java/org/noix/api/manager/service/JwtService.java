@@ -3,16 +3,13 @@ package org.noix.api.manager.service;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import jakarta.servlet.http.Cookie;
 import lombok.RequiredArgsConstructor;
 import org.noix.api.manager.entity.Token;
 import org.noix.api.manager.entity.User;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
-import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -47,16 +44,6 @@ public class JwtService {
                 .expiration(new Date(System.currentTimeMillis() + expiration))
                 .signWith(getSecretKey(), Jwts.SIG.HS512)
                 .compact();
-    }
-
-
-    public Cookie extractAuthCookie(Cookie[] cookies) {
-        for (Cookie cookie : cookies) {
-            if (cookie.getName().equals("Authorization")) {
-                return cookie;
-            }
-        }
-        return new Cookie("Authorization", null);
     }
 
     public String extractUsername(String jwt) {

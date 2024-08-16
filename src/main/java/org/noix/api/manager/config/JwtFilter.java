@@ -2,7 +2,6 @@ package org.noix.api.manager.config;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
@@ -36,14 +35,12 @@ public class JwtFilter extends OncePerRequestFilter {
             @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
         try {
-            Cookie[] cookies = request.getCookies();
-            Cookie authCookie = jwtService.extractAuthCookie(cookies);
-            String jwt = authCookie.getValue();
-
-            if (jwt == null || jwt.length() < 10) {
+            final String header = request.getHeader("Authorization");
+            if (!header.startsWith("Bearer ")) {
                 filterChain.doFilter(request, response);
                 return;
             }
+            String jwt = header.substring(7);
 
             String username = jwtService.extractUsername(jwt);
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
@@ -61,6 +58,7 @@ public class JwtFilter extends OncePerRequestFilter {
             }
         } catch (Exception e) {
             logger.warn("Exception in jwt filter: {}", e.getMessage());
+            e.printStackTrace();
             logger.debug(Arrays.toString(e.getStackTrace()));
         }
         filterChain.doFilter(request, response);

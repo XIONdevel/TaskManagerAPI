@@ -1,6 +1,5 @@
 package org.noix.api.manager.service;
 
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.noix.api.manager.entity.User;
@@ -25,8 +24,8 @@ public class UserService implements UserDetailsService {
 
     // No token validation, use only for AUTHENTICATED endpoints
     public User getUserFromRequest(HttpServletRequest request) {
-        Cookie authCookie = jwtService.extractAuthCookie(request.getCookies());
-        String username = jwtService.extractUsername(authCookie.getValue());
+        String jwt = request.getHeader("Authorization").substring(7);
+        String username = jwtService.extractUsername(jwt);
         return loadUserByUsername(username);
     }
 
