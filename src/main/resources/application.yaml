@@ -20,7 +20,7 @@ logging:
     org.noix.api.management: debug
 
 app:
-  security:
+  security: #TODO: modify before use
     secret: lfQuJL/ZkLwIDR28cNTbrzuWoZVtcW6v+5lAa/5esAFmx3p5M2VkeSsyEwWXXEuBCe9YZsoS/d5zaxsEXI/t4w== # HS512
     expiration: 2419200000 # 28 days
   cors:

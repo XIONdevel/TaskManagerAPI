@@ -1,14 +1,16 @@
 package org.noix.api.manager.controller.rest;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.noix.api.manager.dto.BasicTaskDTO;
 import org.noix.api.manager.entity.BasicTask;
 import org.noix.api.manager.service.TaskService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.naming.NoPermissionException;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/task/basic")
@@ -17,6 +19,10 @@ public class BasicTaskController {
 
     private final TaskService taskService;
 
+    @GetMapping("/getAll")
+    public ResponseEntity<List<BasicTaskDTO>> getAll(HttpServletRequest request) {
+        return ResponseEntity.ok(taskService.getAllBasicForUser(request));
+    }
 
     @PutMapping("/{taskId}")
     public ResponseEntity<Void> updateBasicTask(
@@ -35,13 +41,12 @@ public class BasicTaskController {
     }
 
     @PostMapping("/create")
-    public void createTask(
-            @RequestBody String name,
-            @RequestBody String description,
+    public ResponseEntity<BasicTask> createTask(
             HttpServletRequest request,
-            HttpServletResponse response
-    ) {
-        taskService.createTask(name, description, request, response);
+            @RequestBody BasicTaskDTO dto
+            ) {
+        BasicTask task = taskService.createTask(dto.getName(), dto.getDescription(), request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(task);
     }
 
 }

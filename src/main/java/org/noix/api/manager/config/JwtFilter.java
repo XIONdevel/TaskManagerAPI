@@ -36,7 +36,7 @@ public class JwtFilter extends OncePerRequestFilter {
     ) throws ServletException, IOException {
         try {
             final String header = request.getHeader("Authorization");
-            if (!header.startsWith("Bearer ")) {
+            if (header == null || !header.startsWith("Bearer ")) {
                 filterChain.doFilter(request, response);
                 return;
             }
@@ -58,7 +58,7 @@ public class JwtFilter extends OncePerRequestFilter {
             }
         } catch (Exception e) {
             logger.warn("Exception in jwt filter: {}", e.getMessage());
-            e.printStackTrace();
+            e.printStackTrace(); //TODO: remove
             logger.debug(Arrays.toString(e.getStackTrace()));
         }
         filterChain.doFilter(request, response);

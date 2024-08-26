@@ -16,12 +16,7 @@ public class TaskController {
 
     private final TaskService taskService;
 
-    @PostMapping("/getAll")
-    public ResponseEntity<List<Task>> getAll(HttpServletRequest request) {
-        return ResponseEntity.ok(taskService.getAllForUser(request));
-    }
-
-    @PostMapping("/deleteAll")
+    @DeleteMapping("/deleteAll")
     public ResponseEntity<Void> deleteAll(HttpServletRequest request) {
         taskService.deleteAllForUser(request);
         return ResponseEntity.ok().build();

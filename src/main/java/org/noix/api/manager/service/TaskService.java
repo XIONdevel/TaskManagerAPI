@@ -1,8 +1,8 @@
 package org.noix.api.manager.service;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.noix.api.manager.dto.BasicTaskDTO;
 import org.noix.api.manager.entity.BasicTask;
 import org.noix.api.manager.entity.User;
 import org.noix.api.manager.entity.role.Role;
@@ -28,14 +28,9 @@ public class TaskService {
     private final BasicTaskRepository basicRepository;
     private final UserService userService;
 
-    public List<Task> getAllForUser(HttpServletRequest request) {
-        List<Task> tasks = new ArrayList<>();
+    public List<BasicTaskDTO> getAllBasicForUser(HttpServletRequest request) {
         User user = userService.getUserFromRequest(request);
-
-        //TODO: add all task repos here
-        tasks.addAll(basicRepository.findAllByOwner(user));
-
-        return tasks;
+        return basicRepository.findAllByOwnerAsDTO(user);
     }
 
     public void deleteAllForUser(HttpServletRequest request) {
@@ -74,18 +69,16 @@ public class TaskService {
         basicRepository.deleteById(taskId);
     }
 
-    public void createTask(
+    public BasicTask createTask(
             String name,
             String description,
-            HttpServletRequest request,
-            HttpServletResponse response
+            HttpServletRequest request
     ) {
         User user = userService.getUserFromRequest(request);
         if (name.isEmpty()) {
             throw new DataNotValidException("You can`t create empty task");
         }
         BasicTask task = new BasicTask(name, description, user);
-        basicRepository.save(task);
-        response.setStatus(201);
+        return basicRepository.save(task);
     }
 }
