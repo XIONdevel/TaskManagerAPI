@@ -46,6 +46,7 @@ public class SecurityConfig {
                                 "/api/auth/logout-here",
                                 "/api/auth/logout-all",
                                 "/api/auth/check",
+                                "/api/task/basic/**",
                                 "/api/task/**"
                         ).hasAuthority(Permission.AUTHENTICATED.name())
                 )

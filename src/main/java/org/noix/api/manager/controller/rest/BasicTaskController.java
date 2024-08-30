@@ -10,7 +10,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.naming.NoPermissionException;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/task/basic")
@@ -34,19 +37,23 @@ public class BasicTaskController {
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/{taskId}")
-    public ResponseEntity<Void> deleteTask(@PathVariable Long taskId, HttpServletRequest request) throws NoPermissionException {
-        taskService.deleteTask(taskId, request);
-        return ResponseEntity.ok().build();
-    }
-
     @PostMapping("/create")
     public ResponseEntity<BasicTask> createTask(
             HttpServletRequest request,
             @RequestBody BasicTaskDTO dto
-            ) {
+    ) {
         BasicTask task = taskService.createTask(dto.getName(), dto.getDescription(), request);
         return ResponseEntity.status(HttpStatus.CREATED).body(task);
+    }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<String> multipleDelete(@RequestBody Long[] ids, HttpServletRequest request) {
+        try {
+            taskService.deleteTasks(request, ids);
+        } catch (NoPermissionException e) {
+            return ResponseEntity.status(403).body(e.getMessage());
+        }
+        return ResponseEntity.ok("Success");
     }
 
 }

@@ -1,12 +1,12 @@
 package org.noix.api.manager.service;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.noix.api.manager.dto.BasicTaskDTO;
 import org.noix.api.manager.entity.BasicTask;
 import org.noix.api.manager.entity.User;
 import org.noix.api.manager.entity.role.Role;
-import org.noix.api.manager.entity.task.Task;
 import org.noix.api.manager.exception.DataNotValidException;
 import org.noix.api.manager.repository.BasicTaskRepository;
 import org.slf4j.Logger;
@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 
 import javax.naming.NoPermissionException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -51,7 +50,8 @@ public class TaskService {
                 logger.warn("Attempt update desk for another user, task id: {}, user id: {}, user ip: {}", taskId, user.getId(), ip);
                 throw new NoPermissionException("You don`t have permission to delete this desk");
             }
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
 
         task.setId(taskId);
         task.setOwner(user);
@@ -59,12 +59,18 @@ public class TaskService {
         basicRepository.save(task);
     }
 
-    public void deleteTask(Long taskId, HttpServletRequest request) throws NoPermissionException {
+    public void deleteTasks(HttpServletRequest request, Long... taskId) throws NoPermissionException {
         User user = userService.getUserFromRequest(request);
+        String userIp = requestService.getClientIp(request);
+        for (Long id : taskId) {
+            deleteTask(id, user, userIp);
+        }
+    }
+
+    private void deleteTask(Long taskId, User user, String userIp) throws NoPermissionException {
         if (!basicRepository.existsByIdAndOwner(taskId, user) && user.getRole() != Role.ADMIN) {
-            final String ip = requestService.getClientIp(request);
-            logger.warn("Attempt delete desk for another user, task id: {}, user id: {}, user ip: {}", taskId, user.getId(), ip);
-            throw new NoPermissionException("You don`t have permission to delete this desk");
+            logger.warn("Attempt delete desk for another user, task id: {}, user id: {}, user ip: {}", taskId, user.getId(), userIp);
+            throw new NoPermissionException("You don`t have permission to delete this task");
         }
         basicRepository.deleteById(taskId);
     }
