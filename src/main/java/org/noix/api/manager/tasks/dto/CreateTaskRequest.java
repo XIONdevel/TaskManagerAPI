@@ -5,19 +5,18 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
-
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class BasicTaskDTO {
-
-    private Long id;
+public class CreateTaskRequest {
 
     private String name;
     private String description;
 
-    private Date created;
-    private Date updated;
+    public boolean isNameValid() {
+        if (name == null) return false;
+        return name.length() >= 6 &&
+                name.length() <= 30;
+    }
 }
