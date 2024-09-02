@@ -55,9 +55,9 @@ public class JwtFilter extends OncePerRequestFilter {
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                 }
             }
-        } catch (Exception e) {
+        } catch (Exception e) { //TODO: remove
             logger.warn("Exception in jwt filter: {}", e.getMessage());
-            e.printStackTrace(); //TODO: remove
+            e.printStackTrace();
             logger.debug(Arrays.toString(e.getStackTrace()));
         }
         filterChain.doFilter(request, response);

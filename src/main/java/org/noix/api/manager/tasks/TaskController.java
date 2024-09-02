@@ -35,7 +35,7 @@ public class TaskController {
             @PathVariable Long taskId,
             @RequestBody TaskDTO task,
             HttpServletRequest request
-    ) throws NoPermissionException, InvalidDataException {
+    ) throws NoPermissionException {
         taskService.updateTask(taskId, task, request);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
