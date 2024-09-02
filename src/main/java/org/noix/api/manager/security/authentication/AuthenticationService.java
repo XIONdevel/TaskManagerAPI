@@ -14,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -34,28 +35,28 @@ public class AuthenticationService {
                         request.getPassword()
                 )
         );
-        Token token = tokenService.getValidToken(user);
-        String jwt;
-
-        if (token.getJwt() != null) {
-            jwt = token.getJwt();
-        } else {
+        Optional<Token> optionalToken = tokenService.getValidToken(user);
+        Token token;
+        if (optionalToken.isEmpty()) {
             token = jwtService.createToken(user);
-            jwt = token.getJwt();
+        } else {
+            token = optionalToken.get();
         }
+        String jwt = token.getJwt();
         response.addHeader("Authorization", "Bearer " + jwt);
     }
 
     public void register(AuthenticationRequest request, HttpServletResponse response) throws IOException {
-        User user = userService.createUser(
+        Optional<User> optionalUser = userService.createUser(
                 request.getUsername(),
                 passwordEncoder.encode(request.getPassword())
         );
-        if (user.getUsername() == null) {
+        if (optionalUser.isEmpty()) {
             response.sendError(409, "Username is taken");
             return;
         }
 
+        User user = optionalUser.get();
         Token token = jwtService.createToken(user);
         response.addHeader("Authorization", "Bearer " + token.getJwt());
     }

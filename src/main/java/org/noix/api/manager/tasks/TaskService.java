@@ -50,7 +50,7 @@ public class TaskService {
         Long userId = user.getId();
 
         Task task = taskRepository.findById(taskId)
-                .orElseThrow(() -> new EntityNotFoundException("Task with same id not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Task with not found"));
 
         if (task.getOwnerId().equals(userId)) {
             task.setName(updatedTask.getName());
@@ -86,10 +86,11 @@ public class TaskService {
             HttpServletRequest servletRequest
     ) {
         User user = userService.getUserFromRequest(servletRequest);
-        if (!createRequest.isNameValid()) {
+        if (createRequest.isNameValid()) {
+            Task task = new Task(createRequest, user);
+            return taskRepository.save(task);
+        } else {
             throw new InvalidDataException("You can`t create empty task");
         }
-        Task task = new Task(createRequest, user);
-        return taskRepository.save(task);
     }
 }

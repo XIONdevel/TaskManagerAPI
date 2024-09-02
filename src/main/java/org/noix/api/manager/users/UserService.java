@@ -1,5 +1,6 @@
 package org.noix.api.manager.users;
 
+import jakarta.persistence.EntityExistsException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.noix.api.manager.security.jwt.JwtService;
@@ -7,6 +8,8 @@ import org.noix.api.manager.users.roles.Role;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -28,17 +31,18 @@ public class UserService implements UserDetailsService {
         return loadUserByUsername(username);
     }
 
-    public User createUser(String username, String password) {
-        if (userRepository.existsByUsername(username)) {
-            return User.builder().username(null).build();
+    public Optional<User> createUser(String username, String password) {
+        if (userRepository.existsByUsername(username)) { //TODO: replace
+            return Optional.empty();
         } else {
-            return userRepository.save(
+            User user = userRepository.save(
                     User.builder()
                             .username(username)
                             .password(password)
                             .role(Role.USER)
                             .build()
             );
+            return Optional.of(user);
         }
     }
 }

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.noix.api.manager.users.User;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,23 +24,23 @@ public class TokenService {
         return token.getUser().equals(user) && !token.isExpired();
     }
 
-    public Token getValidToken(User user) {
+    public Optional<Token> getValidToken(User user) {
         List<Token> tokens = tokenRepository.getAllByUser(user);
         for (Token t : tokens) {
             if (t.isExpired()) {
                 tokenRepository.deleteById(t.getId());
             } else {
-                return t;
+                return Optional.of(t);
             }
         }
-        return Token.builder().jwt(null).build();
+        return Optional.empty();
     }
 
     public Token saveToken(String jwt, User user, Long expiration) {
         Token token = Token.builder()
                 .jwt(jwt)
                 .user(user)
-                .expiration(new java.sql.Date(System.currentTimeMillis() + expiration))
+                .expiration(new Date(System.currentTimeMillis() + expiration))
                 .build();
         return tokenRepository.save(token);
     }
