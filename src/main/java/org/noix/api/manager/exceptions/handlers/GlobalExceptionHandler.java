@@ -1,4 +1,4 @@
-﻿package org.noix.api.manager.exceptions.handlers;
+package org.noix.api.manager.exceptions.handlers;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
