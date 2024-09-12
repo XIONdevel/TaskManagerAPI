@@ -1,21 +1,21 @@
-﻿package org.noix.api.manager.shopping.dto;
+package org.noix.api.manager.shopping.items.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.noix.api.manager.shopping.items.ShoppingItem;
-
-import java.util.List;
 
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ShoppingListDTO {
+public class ShoppingItemDTO {
 
     private Long id;
     private String name;
-    private List<ShoppingItem> items;
+    private Double price;
+    private Integer quantity;
+    private Boolean bought;
+    private Long listId;
 
 }

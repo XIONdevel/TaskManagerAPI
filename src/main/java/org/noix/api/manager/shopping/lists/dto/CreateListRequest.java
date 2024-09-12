@@ -1,4 +1,4 @@
-package org.noix.api.manager.shopping.dto;
+package org.noix.api.manager.shopping.lists.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,11 +9,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreateItemRequest {
+public class CreateListRequest {
 
     private String name;
-    private Double price;
-    private Integer quantity;
-    private Boolean bought;
 
 }
