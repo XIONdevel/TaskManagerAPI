@@ -47,8 +47,8 @@ public class SecurityConfig {
                                 "/api/auth/logout-here",
                                 "/api/auth/logout-all",
                                 "/api/auth/check",
-                                "/api/task/basic/**",
-                                "/api/task/**"
+                                "/api/task/**",
+                                "/api/shopping/**"
                         ).hasAuthority(Permission.AUTHENTICATED.name())
                 )
                 .rememberMe(Customizer.withDefaults());

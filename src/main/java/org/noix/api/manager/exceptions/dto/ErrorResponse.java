@@ -1,4 +1,4 @@
-﻿package org.noix.api.manager.exceptions.dto;
+package org.noix.api.manager.exceptions.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
